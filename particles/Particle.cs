@@ -17,6 +17,8 @@ namespace particles
         public static Random rand = new Random();
         public float Life;
 
+        public int Cooldown = 0;
+
         public Particle()
         {
             var direction = (double)rand.Next(360);

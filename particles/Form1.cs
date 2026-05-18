@@ -12,83 +12,54 @@ namespace particles
 {
     public partial class Form1 : Form
     {
-        List<Emitter> emitters = new List<Emitter>();
-        Emitter emitter; // добавим поле для эмиттера
+       // List<Emitter> emitters = new List<Emitter>();
+        Emitter emitter; 
 
-        GravityPoint point1; // добавил поле под первую точку
-        GravityPoint point2;
+        TeleportPoint teleportIn;   
+        ExitPoint teleportOut;
 
         public Form1()
         {
             InitializeComponent();
             picDisplay.Image=new Bitmap (picDisplay.Width,picDisplay.Height);
 
-            this.emitter = new Emitter // создаю эмиттер и привязываю его к полю emitter
+            this.emitter = new Emitter 
             {
                 Direction = 0,
                 Spreading = 10,
-                SpeedMin = 10,
-                SpeedMax = 10,
-                ColorFrom = Color.Gold,
-                ColorTo = Color.FromArgb(0, Color.Red),
-                ParticlesPerTick = 10,
+                SpeedMin = 4,
+                SpeedMax = 6,
+                ColorFrom = Color.White,
+                ColorTo = Color.FromArgb(0, Color.Blue),
+                ParticlesPerTick = 8,
+                X = 100,
+                Y =100,
+                GravitationX = 0,
+                GravitationY = 0,
+                LifeMin = 300,          
+                LifeMax = 400,
+            };
+
+
+            teleportIn = new TeleportPoint
+            {
                 X = picDisplay.Width / 2,
                 Y = picDisplay.Height / 2,
+                Radius = tbRadius.Value,
+                Power = 300,
+                TargetX = picDisplay.Width - 100,     
+                TargetY = picDisplay.Height / 2,
             };
-
-            emitters.Add(this.emitter);
-
-            point1 = new GravityPoint
+            teleportOut = new ExitPoint
             {
-                X = picDisplay.Width / 2 + 100,
+                X = picDisplay.Width -100,
                 Y = picDisplay.Height / 2,
-            };
-            point2 = new GravityPoint
-            {
-                X = picDisplay.Width / 2 - 100,
-                Y = picDisplay.Height / 2,
-            };
-
-            // привязываем поля к эмиттеру
-            emitter.impactPoints.Add(point1);
-            emitter.impactPoints.Add(point2);
-
-           /* emitter.impactPoints.Add(new GravityPoint
-            {
-                X = picDisplay.Width / 2 + 100,
-                Y = picDisplay.Height / 2,
-            });
-
-            // добавил второй гравитон
-            emitter.impactPoints.Add(new GravityPoint
-            {
-                X = picDisplay.Width / 2 - 100,
-                Y = picDisplay.Height / 2,
-            });*/
-
-            /*emitter = new TopEmitter
-            {
-                Width = picDisplay.Width,
-                GravitationY = 0.25f
-            };
-
-             emitter.impactPoints.Add(new GravityPoint
-             {
-                 X = (float)(picDisplay.Width * 0.25),
-                 Y = picDisplay.Height / 2
-             });
-
-             emitter.impactPoints.Add(new AntiGravityPoint
-             {
-                 X = picDisplay.Width / 2,
-                 Y = picDisplay.Height / 2
-             });
-
-             emitter.impactPoints.Add(new GravityPoint
-             {
-                 X = (float)(picDisplay.Width * 0.75),
-                 Y = picDisplay.Height / 2
-             });*/
+                Speed = 12,
+                Direction = tbDirection.Value,           
+                Spreading = 45
+            }; 
+            emitter.impactPoints.Add(teleportIn);
+            emitter.impactPoints.Add(teleportOut);
         }
 
         private void timer1_Tick(object sender, EventArgs e)
@@ -103,36 +74,38 @@ namespace particles
             picDisplay.Invalidate();
 
         }
-        private void picDisplay_MouseMove(object sender, MouseEventArgs e)
+        private void picDisplay_MouseClick(object sender, MouseEventArgs e)
         {
-            foreach (var emitter in emitters)
+            if (e.Button == MouseButtons.Left)
             {
-                emitter.MousePositionX = e.X;
-                emitter.MousePositionY = e.Y;
+                teleportIn.X = e.X;
+                teleportIn.Y = e.Y;
             }
+            else if (e.Button == MouseButtons.Right)
+            {
+                teleportOut.X = e.X;
+                teleportOut.Y = e.Y;
 
-            // а тут передаем положение мыши, в положение гравитона
-            point2.X = e.X;
-            point2.Y = e.Y;
+                teleportIn.TargetX = teleportOut.X;
+                teleportIn.TargetY = teleportOut.Y;
+            }
+        }
+
+        private void tbRadius_Scroll(object sender, EventArgs e)
+        {
+            teleportIn.Radius = tbRadius.Value;
+            label1.Text = $"Радиус: {tbRadius.Value}";
         }
 
         private void tbDirection_Scroll(object sender, EventArgs e)
         {
-            emitter.Direction = tbDirection.Value;
-            lblDirection.Text = $"{tbDirection.Value}°";
+            teleportOut.Direction = tbDirection.Value;
+            label3.Text = $"Направление: {tbDirection.Value}°";
         }
 
-        private void tbGraviton_Scroll(object sender, EventArgs e)
+        private void Form1_Load(object sender, EventArgs e)
         {
-            foreach (var p in emitter.impactPoints)
-            {
-                point1.Power = tbGraviton.Value;
-            }
-        }
 
-        private void tbGraviton2_Scroll(object sender, EventArgs e)
-        {
-            point2.Power = tbGraviton2.Value;
         }
     }
 }

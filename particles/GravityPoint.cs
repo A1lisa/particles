@@ -33,7 +33,7 @@ namespace particles
 
         public override void Render(Graphics g)
         {
-            // буду рисовать окружность с диаметром равным Power
+
             g.DrawEllipse(
                    new Pen(Color.Red),
                    X - Power / 2,

@@ -36,13 +36,7 @@ namespace particles
 
             foreach (var particle in particles)
             {
-                if (particle.Cooldown > 0)
-                {
-                    particle.Cooldown--;
-                }
-
-                
-
+   
                 if (particle.Life <= 0)
                 {
                     if (particlesToCreate > 0)
@@ -94,7 +88,6 @@ namespace particles
              particle.Life = Particle.rand.Next(LifeMin, LifeMax);
              particle.X = X;
              particle.Y = Y;
-            particle.Cooldown = 0;
 
             var direction = Direction
                  + (double)Particle.rand.Next(Spreading)

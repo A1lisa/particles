@@ -61,12 +61,12 @@
             // 
             this.tbRadius.Location = new System.Drawing.Point(12, 461);
             this.tbRadius.Maximum = 100;
-            this.tbRadius.Minimum = 10;
+            this.tbRadius.Minimum = 30;
             this.tbRadius.Name = "tbRadius";
             this.tbRadius.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.tbRadius.Size = new System.Drawing.Size(180, 56);
             this.tbRadius.TabIndex = 1;
-            this.tbRadius.Value = 10;
+            this.tbRadius.Value = 30;
             this.tbRadius.Scroll += new System.EventHandler(this.tbRadius_Scroll);
             // 
             // lblDirection

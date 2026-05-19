@@ -9,47 +9,28 @@ namespace particles
 {
     internal class TeleportPoint : IImpactPoint
     {
-        public int Radius = 50;
-        public int Power = 100;
-
+        public int Radius = 40;
         public float TargetX;
         public float TargetY;
+        public int ExitDirection = 0;
 
         public override void ImpactParticle(Particle particle)
         {
             float gX = X - particle.X;
             float gY = Y - particle.Y;
-
-            double r = Math.Sqrt(gX * gX + gY * gY);
-
-            if (r>250)
-            {
-                return;
-            }
-
-            if (particle.Cooldown <= 0 && r > 10)
-            {
-                float r2 = (float)Math.Max(200, gX * gX + gY * gY);
-                particle.SpeedX += gX * Power / r2;
-                particle.SpeedY += gY * Power / r2;
-            }
-           
-            if (r < Radius * 1.5f)
-            {
-                particle.SpeedX *= 0.95f;
-                particle.SpeedY *= 0.95f;
-            }
-            float maxSpeed = 12f;
-            particle.SpeedX = Math.Max(-maxSpeed, Math.Min(maxSpeed, particle.SpeedX));
-            particle.SpeedY = Math.Max(-maxSpeed, Math.Min(maxSpeed, particle.SpeedY));
+            float r = (float)Math.Sqrt(gX * gX + gY * gY);
 
             if (r + particle.Radius < Radius)
             {
                 particle.X = TargetX;
                 particle.Y = TargetY;
-                particle.Cooldown = 30;
-               
+
+                double radDirection = ExitDirection * Math.PI / 180.0;
+                particle.SpeedX += (float)(Math.Cos(radDirection) * 8);
+                particle.SpeedY += (float)(Math.Sin (radDirection) * 8);
+
             }
+            
 
         }
 
@@ -77,6 +58,24 @@ namespace particles
                 new SolidBrush(Color.LimeGreen),
                 X,
                 Y,
+                stringFormat
+            );
+
+            g.DrawEllipse(
+                new Pen(Color.Red, 2),
+                TargetX - Radius, 
+                TargetY - Radius, 
+                diameter,
+                diameter
+               );
+            var text1 = "ВЫХОД";
+            var font1 = new Font("Verdana", 8);
+            g.DrawString(
+                text1,
+                font1,
+                new SolidBrush(Color.Red),
+                TargetX,
+                TargetY,
                 stringFormat
             );
         }

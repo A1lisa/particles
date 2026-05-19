@@ -15,8 +15,7 @@ namespace particles
        // List<Emitter> emitters = new List<Emitter>();
         Emitter emitter; 
 
-        TeleportPoint teleportIn;   
-        ExitPoint teleportOut;
+        TeleportPoint teleportPoint;   
 
         public Form1()
         {
@@ -26,40 +25,31 @@ namespace particles
             this.emitter = new Emitter 
             {
                 Direction = 0,
-                Spreading = 10,
+                Spreading = 30,
                 SpeedMin = 4,
                 SpeedMax = 6,
                 ColorFrom = Color.White,
                 ColorTo = Color.FromArgb(0, Color.Blue),
-                ParticlesPerTick = 8,
-                X = 100,
-                Y =100,
-                GravitationX = 0,
-                GravitationY = 0,
+                ParticlesPerTick = 10,
+                X = 0,
+                Y = picDisplay.Height / 2,
                 LifeMin = 300,          
                 LifeMax = 400,
             };
 
 
-            teleportIn = new TeleportPoint
+            teleportPoint = new TeleportPoint
             {
-                X = picDisplay.Width / 2,
+                X = 200,
                 Y = picDisplay.Height / 2,
                 Radius = tbRadius.Value,
-                Power = 300,
                 TargetX = picDisplay.Width - 100,     
                 TargetY = picDisplay.Height / 2,
+
+                ExitDirection = tbDirection.Value,
             };
-            teleportOut = new ExitPoint
-            {
-                X = picDisplay.Width -100,
-                Y = picDisplay.Height / 2,
-                Speed = 12,
-                Direction = tbDirection.Value,           
-                Spreading = 45
-            }; 
-            emitter.impactPoints.Add(teleportIn);
-            emitter.impactPoints.Add(teleportOut);
+            
+            emitter.impactPoints.Add(teleportPoint);
         }
 
         private void timer1_Tick(object sender, EventArgs e)
@@ -78,28 +68,25 @@ namespace particles
         {
             if (e.Button == MouseButtons.Left)
             {
-                teleportIn.X = e.X;
-                teleportIn.Y = e.Y;
+                teleportPoint.X = e.X;
+                teleportPoint.Y = e.Y;
             }
             else if (e.Button == MouseButtons.Right)
             {
-                teleportOut.X = e.X;
-                teleportOut.Y = e.Y;
-
-                teleportIn.TargetX = teleportOut.X;
-                teleportIn.TargetY = teleportOut.Y;
+                teleportPoint.TargetX = e.X;
+                teleportPoint.TargetY = e.Y;
             }
         }
 
         private void tbRadius_Scroll(object sender, EventArgs e)
         {
-            teleportIn.Radius = tbRadius.Value;
+            teleportPoint.Radius = tbRadius.Value;
             label1.Text = $"Радиус: {tbRadius.Value}";
         }
 
         private void tbDirection_Scroll(object sender, EventArgs e)
         {
-            teleportOut.Direction = tbDirection.Value;
+            teleportPoint.ExitDirection = tbDirection.Value;
             label3.Text = $"Направление: {tbDirection.Value}°";
         }
 

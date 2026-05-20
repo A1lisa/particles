@@ -89,6 +89,12 @@ namespace particles
              particle.X = X;
              particle.Y = Y;
 
+            if (particle is ParticleColorful colorful)
+            {
+                colorful.FromColor = Color.White;
+                colorful.ToColor = Color.FromArgb(0, Color.Blue);
+            }
+
             var direction = Direction
                  + (double)Particle.rand.Next(Spreading)
                  - Spreading / 2;

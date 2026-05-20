@@ -23,7 +23,7 @@ namespace particles
             if (r + particle.Radius < Radius)
             {
                 particle.X = TargetX;
-                particle.Y = TargetY;
+                particle.Y = TargetY ;
 
                 double radDirection = ExitDirection * Math.PI / 180.0;
                 particle.SpeedX += (float)(Math.Cos(radDirection) * 8);
